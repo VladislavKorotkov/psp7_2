@@ -79,10 +79,19 @@ public class City {
     public City() {
     }
 
+
+
     public City(int year, int square, List<Citizens> citizens) {
         this.year = year;
         this.square = square;
         this.citizens = citizens;
+    }
+
+    public City(int id, String name, int year, int square) {
+        this.id = id;
+        this.name = name;
+        this.year = year;
+        this.square = square;
     }
 
     public City(int id, int year, int square, List<Citizens> citizens) {

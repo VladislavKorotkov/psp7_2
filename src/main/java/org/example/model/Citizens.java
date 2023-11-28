@@ -19,10 +19,13 @@ public class Citizens {
     private int id;
 
     @Column(name = "language")
-    private int language;
+    private String language;
 
     @Column(name="name")
     private String name;
+
+    @Column(name="count")
+    private int count;
 
     @ManyToOne
     @JoinColumn(name = "city_id", referencedColumnName = "id")
@@ -32,15 +35,38 @@ public class Citizens {
         return id;
     }
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public Citizens(int id, String name, String language, City city, int count) {
+        this.id = id;
+        this.language = language;
+        this.name = name;
+        this.count = count;
+        this.city = city;
+    }
+
+    public Citizens( String name, String language, int count, City city) {
+        this.language = language;
+        this.name = name;
+        this.count = count;
+        this.city = city;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
 
-    public int getLanguage() {
+    public String getLanguage() {
         return language;
     }
 
-    public void setLanguage(int language) {
+    public void setLanguage(String language) {
         this.language = language;
     }
 
@@ -60,7 +86,7 @@ public class Citizens {
         this.city = city;
     }
 
-    public Citizens(int language, String name, City city) {
+    public Citizens(String language, String name, City city) {
         this.language = language;
         this.name = name;
         this.city = city;
@@ -69,7 +95,7 @@ public class Citizens {
     public Citizens() {
     }
 
-    public Citizens(int id, int language, String name, City city) {
+    public Citizens(int id, String language, String name, City city) {
         this.id = id;
         this.language = language;
         this.name = name;
