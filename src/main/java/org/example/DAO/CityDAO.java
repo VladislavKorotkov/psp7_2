@@ -55,4 +55,31 @@ public class CityDAO {
         }
     }
 
+    public List<City> searchCitiesByCitizenName(String citizenName) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        List<City> cities = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            String hql = "SELECT c.city FROM Citizens c WHERE c.name = :citizenName";
+            Query query = session.createQuery(hql);
+            query.setParameter("citizenName", citizenName);
+
+            cities = query.list();
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return cities;
+    }
+
 }

@@ -15,23 +15,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-public class Filter2Panel extends JPanel {
+public class Filter1Panel extends JPanel {
     private CityDAO cityDAO;
-    private JTextField citizensTextField;
+    private CitizensDAO citizensDAO;
+    private JTextField languageTextField;
+    private JTextField cityTextField;
     private JTable table;
     private DefaultTableModel tableModel;
     private JButton filterButton;
 
-    public Filter2Panel() {
-        this.cityDAO = new CityDAO();
+    public Filter1Panel() {
+        this.citizensDAO = new CitizensDAO();
         setSize(800, 600);
         setLayout(new BorderLayout());
 
         tableModel = new DefaultTableModel();
         tableModel.addColumn("ID");
         tableModel.addColumn("Название");
-        tableModel.addColumn("Год основания");
-        tableModel.addColumn("Площадь");
+        tableModel.addColumn("Язык");
+        tableModel.addColumn("Город");
+        tableModel.addColumn("Количество");
 
         // Создание таблицы
         table = new JTable(tableModel);
@@ -40,15 +43,19 @@ public class Filter2Panel extends JPanel {
 
         // Панель ввода
         JPanel inputPanel = new JPanel();
-        inputPanel.setLayout(new GridLayout(1, 2));
+        inputPanel.setLayout(new GridLayout(2, 2));
 
-        JLabel citizensLabel = new JLabel("Название жителей:");
-        citizensTextField = new JTextField(20);
+        JLabel languageLabel = new JLabel("Язык:");
+        languageTextField = new JTextField(20);
+
+        JLabel cityLabel = new JLabel("Город:");
+        cityTextField = new JTextField(20);
 
 
-
-        inputPanel.add(citizensLabel);
-        inputPanel.add(citizensTextField);
+        inputPanel.add(languageLabel);
+        inputPanel.add(languageTextField);
+        inputPanel.add(cityLabel);
+        inputPanel.add(cityTextField);
 
         filterButton = new JButton("Поиск");
         // Добавление компонентов на основное окно
@@ -58,12 +65,13 @@ public class Filter2Panel extends JPanel {
         filterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String citizens = citizensTextField.getText();
-                if (!citizens.isEmpty()) {
-                    List<City> city = cityDAO.searchCitiesByCitizenName(citizens);
-                    initializeTable(city);
+                String language = languageTextField.getText();
+                String city = cityTextField.getText();
+                if (!language.isEmpty() && !city.isEmpty()) {
+                    List<Citizens> citizens = citizensDAO.searchCitizensByLanguageAndCity(language, city);
+                    initializeTable(citizens);
                 } else {
-                    JOptionPane.showMessageDialog(Filter2Panel.this, "Заполните поля", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(Filter1Panel.this, "Заполните поля", "Ошибка", JOptionPane.ERROR_MESSAGE);
 
                 }
             }
@@ -72,10 +80,10 @@ public class Filter2Panel extends JPanel {
 
     }
 
-    private void initializeTable(List<City> cities) {
+    private void initializeTable(List<Citizens> citizens) {
         tableModel.setRowCount(0);
-        for (City city : cities) {
-            tableModel.addRow(new Object[]{city.getId(), city.getName(), city.getYear(), city.getSquare()});
+        for (Citizens citizens1 : citizens) {
+            tableModel.addRow(new Object[]{citizens1.getId(), citizens1.getName(), citizens1.getLanguage(), citizens1.getCity().getName(), citizens1.getCount()});
         }
     }
 }

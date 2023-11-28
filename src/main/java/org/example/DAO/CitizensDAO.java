@@ -24,13 +24,33 @@ public class CitizensDAO {
         }
     }
 
-//    public City getByName(String name){
-//        try (Session session = sessionFactory.openSession()) {
-//            Query<Dormitory> query = session.createQuery("from Dormitory where name= :name", Dormitory.class);
-//            query.setParameter("name", name);
-//            return query.getResultList().get(0);
-//        }
-//    }
+    public List<Citizens> searchCitizensByLanguageAndCity(String language, String cityName) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        List<Citizens> citizens = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            String hql = "FROM Citizens c WHERE c.language = :language AND c.city.name = :cityName";
+            Query query = session.createQuery(hql);
+            query.setParameter("language", language);
+            query.setParameter("cityName", cityName);
+
+            citizens = query.list();
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return citizens;
+    }
 
     public Citizens create(Citizens citizens){
         try (Session session = sessionFactory.openSession()) {
